@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortal Kombat | Landing Page</title>
+
+<!-- Anime.js (obligatorio para animaciones) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+<style>
+  /* ===========================================================
+     VARIABLES / RESET
+  =========================================================== */
+  :root{
+    --bg: #0a0a0a;
+    --bg-alt: #141414;
+    --red: #b00e0e;
+    --red-glow: #ff1a1a;
+    --gold: #d4af37;
+    --text: #f2f2f2;
+    --text-dim: #a3a3a3;
+    --font-title: Georgia, 'Times New Roman', serif; /* TODO: cambiar por una tipografía tipo "dragón/kombat" si quieres */
+    --font-body: 'Segoe UI', Tahoma, sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  img{ max-width:100%; display:block; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  ul{ list-style:none; }
+
+  section{ padding: 6rem 5vw; }
+
+  h1,h2,h3{ font-family: var(--font-title); }
+
+  .section-title{
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: var(--gold);
+    text-align:center;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* ===========================================================
+     HEADER / NAV
+  =========================================================== */
+  header{
+    position: fixed;
+    top:0; left:0; width:100%;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 1.2rem 5vw;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+  }
+
+  .logo{
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--red-glow);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  nav ul{
+    display:flex;
+    gap: 2rem;
+  }
+
+  nav a{
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color .3s;
+  }
+
+  nav a:hover{ color: var(--red-glow); }
+
+  /* ===========================================================
+     HERO — con transformación 3D (CSS 3D transforms)
+  =========================================================== */
+  .hero{
+    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    position: relative;
+    padding-top: 6rem;
+  }
+
+  .hero h1{
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    text-transform: uppercase;
+    color: var(--text);
+    text-shadow: 0 0 25px var(--red-glow);
+  }
+
+  .hero p{
+    color: var(--text-dim);
+    max-width: 600px;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+
+  /* Contenedor con perspectiva 3D */
+  .card-3d-wrapper{
+    perspective: 1000px;
+    margin-top: 3rem;
+  }
+
+  .card-3d{
+    width: 260px;
+    height: 340px;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    background: linear-gradient(145deg, var(--bg-alt), #1f1f1f);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--text-dim);
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  }
+  /* La rotación real de esta tarjeta se controla desde JS (mousemove) */
+
+  /* ===========================================================
+     HISTORIA
+  =========================================================== */
+  #historia .content{
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  /* TODO: aquí va la línea de tiempo / historia del juego */
+
+  /* ===========================================================
+     ESTADÍSTICAS
+  =========================================================== */
+  .stats-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .stat-card{
+    background: var(--bg-alt);
+    border: 1px solid #262626;
+    border-radius: 10px;
+    padding: 2rem 1rem;
+    text-align:center;
+  }
+
+  .stat-number{
+    font-size: 2.5rem;
+    font-weight:bold;
+    color: var(--red-glow);
+  }
+
+  .stat-label{
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin-top: 0.5rem;
+  }
+  /* TODO: llenar con datos reales (personajes, juegos lanzados, ventas, etc.) */
+
+  /* ===========================================================
+     GALERÍA
+  =========================================================== */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-item{
+    aspect-ratio: 4/3;
+    background: var(--bg-alt);
+    border-radius: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    overflow:hidden;
+  }
+  /* TODO: reemplazar por <img> reales de personajes/escenarios */
+
+  /* ===========================================================
+     FOOTER
+  =========================================================== */
+  footer{
+    padding: 3rem 5vw;
+    text-align:center;
+    color: var(--text-dim);
+    border-top: 1px solid #262626;
+    font-size: 0.85rem;
+  }
+
+  /* ===========================================================
+     RESPONSIVIDAD
+  =========================================================== */
+  @media (max-width: 768px){
+    nav ul{ gap: 1rem; }
+    section{ padding: 4rem 6vw; }
+  }
+
+  @media (max-width: 480px){
+    nav{ display:none; } /* TODO: reemplazar por menú hamburguesa */
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <div class="logo">Mortal Kombat</div>
+    <nav>
+      <ul>
+        <li><a href="#historia">Historia</a></li>
+        <li><a href="#estadisticas">Estadísticas</a></li>
+        <li><a href="#galeria">Galería</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="inicio">
+    <h1 id="hero-title">Mortal Kombat</h1>
+    <p>Historia, personajes y datos del videojuego de peleas más icónico y sangriento de la industria.</p>
+
+    <div class="card-3d-wrapper">
+      <div class="card-3d" id="card3d">TODO: contenido/imagen 3D</div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORIA ============ -->
+  <section id="historia">
+    <h2 class="section-title">Historia</h2>
+    <div class="content">
+      <p>TODO: reseña histórica del origen y evolución de Mortal Kombat (1992 - actualidad).</p>
+    </div>
+  </section>
+
+  <!-- ============ ESTADÍSTICAS ============ -->
+  <section id="estadisticas">
+    <h2 class="section-title">Estadísticas</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" data-count="12">0</div>
+        <div class="stat-label">Juegos principales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-count="90">0</div>
+        <div class="stat-label">Personajes jugables</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-count="1992">0</div>
+        <div class="stat-label">Año de lanzamiento</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-count="500">0</div>
+        <div class="stat-label">Millones de dólares en ventas</div>
+      </div>
+    </div>
+    <!-- TODO: ajustar data-count con cifras reales verificadas -->
+  </section>
+
+  <!-- ============ GALERÍA ============ -->
+  <section id="galeria">
+    <h2 class="section-title">Galería</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">Imagen 1</div>
+      <div class="gallery-item">Imagen 2</div>
+      <div class="gallery-item">Imagen 3</div>
+      <div class="gallery-item">Imagen 4</div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <p>Proyecto académico — Mortal Kombat. TODO: nombres del equipo / créditos.</p>
+  </footer>
+
+  <!-- ===========================================================
+       JAVASCRIPT
+  =========================================================== -->
+  <script>
+    /* ---------- Animaciones de entrada con Anime.js ---------- */
+    anime({
+      targets: '#hero-title',
+      opacity: [0, 1],
+      translateY: [-40, 0],
+      easing: 'easeOutExpo',
+      duration: 1200
+    });
+
+    anime({
+      targets: '.hero p',
+      opacity: [0, 1],
+      translateY: [20, 0],
+      easing: 'easeOutExpo',
+      duration: 1200,
+      delay: 300
+    });
+
+    anime({
+      targets: '.card-3d-wrapper',
+      opacity: [0, 1],
+      scale: [0.8, 1],
+      easing: 'easeOutBack',
+      duration: 1200,
+      delay: 600
+    });
+
+    /* ---------- Tarjeta 3D: rotación con el mouse ---------- */
+    const card = document.getElementById('card3d');
+    const wrapper = card.parentElement;
+
+    wrapper.addEventListener('mousemove', (e) => {
+      const rect = wrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rotateX = ((y / rect.height) - 0.5) * -20;
+      const rotateY = ((x / rect.width) - 0.5) * 20;
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+
+    /* ---------- Contadores animados con Anime.js + IntersectionObserver ---------- */
+    const statNumbers = document.querySelectorAll('.stat-number');
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const endValue = parseInt(el.getAttribute('data-count'), 10);
+          anime({
+            targets: el,
+            innerHTML: [0, endValue],
+            round: 1,
+            easing: 'easeInOutExpo',
+            duration: 2000
+          });
+          statsObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(el => statsObserver.observe(el));
+
+    /* ---------- Animación de aparición al hacer scroll (secciones) ---------- */
+    const sections = document.querySelectorAll('section:not(.hero)');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          anime({
+            targets: entry.target,
+            opacity: [0, 1],
+            translateY: [40, 0],
+            easing: 'easeOutExpo',
+            duration: 900
+          });
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    sections.forEach(sec => {
+      sec.style.opacity = 0;
+      sectionObserver.observe(sec);
+    });
+
+    /* ===========================================================
+       TODO PARA TI:
+       - Reemplazar textos "TODO" con contenido real de Mortal Kombat.
+       - Agregar imágenes reales en .gallery-item (o convertir a <img>).
+       - Si quieres ir más allá con 3D, puedes integrar Three.js
+         para un modelo o efecto más elaborado (ej. logo 3D girando).
+       - Agregar menú hamburguesa para móvil (nav está oculto <480px).
+       - Revisar accesibilidad (alt en imágenes, contraste, etc.)
+    =========================================================== */
+  </script>
+
+</body>
+</html>
